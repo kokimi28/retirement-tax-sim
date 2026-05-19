@@ -151,29 +151,6 @@ export default function Home() {
             </div>
           </section>
         </main>
-
-        {/* フッター */}
-        <footer className="bg-white border-t border-gray-200 mt-16">
-          <div className="max-w-3xl mx-auto px-4 py-8 text-xs text-gray-500 space-y-3">
-            <p>
-              <strong className="text-gray-700">免責事項：</strong>
-              本シミュレーターの計算結果はあくまで参考値です。実際の税額は個別の事情により異なる場合があります。重要な意思決定の前には、税理士・FP等の専門家にご相談ください。本サイトの情報により生じたいかなる損害についても責任を負いません。
-            </p>
-            <p>
-              <strong className="text-gray-700">広告について：</strong>
-              本サイトには広告（アフィリエイトリンク）が含まれます。リンク経由でサービスの申込・契約が成立した場合、運営者に報酬が支払われることがあります。
-            </p>
-            <p>
-              <strong className="text-gray-700">最終更新：</strong>2026年5月17日 ／
-              <strong className="text-gray-700"> 適用法令：</strong>令和7年4月1日現在
-            </p>
-            <div className="pt-3 border-t border-gray-200 flex gap-4">
-              <a href="/about" className="hover:text-gray-700">サイトについて</a>
-              <a href="/privacy" className="hover:text-gray-700">プライバシーポリシー</a>
-              <a href="/disclosure" className="hover:text-gray-700">運営者情報</a>
-            </div>
-          </div>
-        </footer>
       </div>
     </>
   );
