@@ -40,8 +40,8 @@ const CATEGORY_LABEL: Record<RetirementCategory, string> = {
 
 export default function Calculator() {
   // 入力状態
-  const [retirementMan, setRetirementMan] = useState<string>('1500');
-  const [years, setYears] = useState<string>('30');
+  const [retirementMan, setRetirementMan] = useState<string>('2000');
+  const [years, setYears] = useState<string>('25');
   const [months, setMonths] = useState<string>('0');
   const [isExecutive, setIsExecutive] = useState<boolean>(false);
   const [separation, setSeparation] = useState<SeparationReason>('voluntary');
@@ -91,7 +91,7 @@ export default function Calculator() {
               value={retirementMan}
               onChange={(e) => setRetirementMan(e.target.value)}
               className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="例: 1500"
+              placeholder="例: 2000"
             />
           </div>
 
