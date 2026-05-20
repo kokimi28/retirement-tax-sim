@@ -33,9 +33,9 @@ export const SITE_META = {
  */
 export const OPERATOR_INFO = {
   /** 運営者氏名 */
-  name: '【準備中】',
+  name: '三浦 航輝',
   /** 連絡先メールアドレス */
-  email: '【準備中】',
+  email: 'kokimi2890@gmail.com',
   /** 所在地（個人運営は都道府県のみで可、請求があれば開示する形が一般的） */
   address: '請求があった場合、遅滞なく開示します',
   /** 電話番号（個人運営は省略可、請求があれば開示する形が一般的） */
