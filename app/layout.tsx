@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Script from 'next/script';
 import SiteFooter from '@/components/SiteFooter';
 import './globals.css';
 
@@ -35,6 +34,10 @@ export default function RootLayout({
   // Google Analytics 4 Measurement ID
   // Vercel の環境変数 NEXT_PUBLIC_GA_MEASUREMENT_ID で設定する。
   // 未設定の場合は GA4 タグを出力しない（開発・プレビュー環境で安全）。
+  //
+  // 注：GA タグは <head> 内に配置する必要がある。
+  // Search Console の所有権確認（Google Analytics 方式）が
+  // <body> 内の GA タグでは認証できない仕様のため。
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
@@ -42,25 +45,29 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {gaId && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}', { anonymize_ip: true });
+                `,
+              }}
+            />
+          </>
+        )}
+      </head>
       <body className="min-h-full flex flex-col">
         <div className="flex-1">{children}</div>
         <SiteFooter />
-        {gaId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}', { anonymize_ip: true });
-              `}
-            </Script>
-          </>
-        )}
       </body>
     </html>
   );
