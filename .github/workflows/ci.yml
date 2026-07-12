@@ -1,0 +1,37 @@
+name: CI
+
+# 必須ステータスチェック。ブランチ保護 ruleset で main に対しこの CI の
+# test / build を required にする（承認必須は付けない — 1人リポでは
+# 自己承認できずマージ不能になるため。詳細は dev-env の research-decisions.md）。
+# lint / typecheck script は本リポには無い（型チェックは next build が兼ねる）。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# 同一 PR の古い実行はキャンセルして Actions 分数を節約
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest # Windows($0.010/分)ではなく Linux($0.006/分)固定
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
