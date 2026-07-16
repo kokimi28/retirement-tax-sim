@@ -289,6 +289,7 @@ export default function Calculator() {
               ? '次の転職先を決める前に、退職金を含めた生活設計をプロのFPと一緒に整理しませんか。何度でも無料で相談できます。'
               : '退職金の手取り額に加え、失業給付や社会保険の継続など、お金まわりの最適化をFPに相談できます。'}
           </p>
+          {/* ⚠ 実URLへの差し替え＝収益化トリガー。Vercel Pro 移行のオーナー判断（STOP: 決済・課金）とセットで行う。CLAUDE.md「収益化トリガー」節を参照 */}
           <a
             href="#"
             rel="sponsored nofollow noopener noreferrer"
@@ -332,6 +333,7 @@ export default function Calculator() {
             <p className="text-sm text-gray-700 mb-3">
               該当するケースがある方は、複雑な計算と申告手続きを専門家に任せるのが確実です。
             </p>
+            {/* ⚠ 実URLへの差し替え＝収益化トリガー。Vercel Pro 移行のオーナー判断（STOP: 決済・課金）とセットで行う。CLAUDE.md「収益化トリガー」節を参照 */}
             <a
               href="#"
               rel="sponsored nofollow noopener noreferrer"

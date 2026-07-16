@@ -140,6 +140,7 @@ export default function Home() {
               <p className="text-sm text-slate-700 mb-4">
                 退職金の試算が済んだら、次のステップへ。条件に合った転職先を、専任のキャリアアドバイザーが無料でサポートします。
               </p>
+              {/* ⚠ 実URLへの差し替え＝収益化トリガー。Vercel Pro 移行のオーナー判断（STOP: 決済・課金）とセットで行う。CLAUDE.md「収益化トリガー」節を参照 */}
               <a
                 href="#"
                 rel="sponsored nofollow noopener noreferrer"
