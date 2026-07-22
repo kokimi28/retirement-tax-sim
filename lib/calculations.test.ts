@@ -14,6 +14,7 @@ import {
   calcAll,
   compareWithOneMoreYear,
   validateInput,
+  calcWithholdingWithoutDeclaration,
 } from './calculations';
 
 describe('calcEffectiveYears: 勤続年数の切り上げ', () => {
@@ -241,5 +242,51 @@ describe('validateInput: 入力検証', () => {
       isExecutive: false,
     });
     expect(errors.some((e) => e.field === 'monthsOfService')).toBe(true);
+  });
+});
+
+
+// ============================================================
+// 記事 worked example の裏取り（auto-worker v2.5 品質ゲート①）
+// 記事本文の金額例と同じ入力・期待値をここで固定し、誤値を CI で落とす。
+// ============================================================
+
+describe('記事 worked example: 申告書出し忘れ（Q3 / dc-... 記事の数値の裏取り）', () => {
+  // 退職金2,000万円・勤続30年・一般（記事 forgot-declaration-form の例）
+  const input = { retirementAmount: 20_000_000, yearsOfService: 30, isExecutive: false };
+
+  it('申告書提出（正規）: 課税250万・所得税155,702・住民税250,000・税合計405,702・手取り19,594,298', () => {
+    const r = calcAll(input);
+    expect(r.taxableRetirementIncome).toBe(2_500_000);
+    expect(r.incomeTax).toBe(155_702);
+    expect(r.residentTax).toBe(250_000);
+    expect(r.totalTax).toBe(405_702);
+    expect(r.netAmount).toBe(19_594_298);
+  });
+
+  it('申告書未提出: 20.42%源泉 = 4,084,000', () => {
+    expect(calcWithholdingWithoutDeclaration(20_000_000)).toBe(4_084_000);
+  });
+
+  it('出し忘れの過大源泉 = 4,084,000 − 405,702 = 3,678,298（確定申告で精算可）', () => {
+    const proper = calcAll(input).totalTax;
+    const withheld = calcWithholdingWithoutDeclaration(20_000_000);
+    expect(withheld - proper).toBe(3_678_298);
+  });
+
+  it('未提出源泉は退職金0円で0円', () => {
+    expect(calcWithholdingWithoutDeclaration(0)).toBe(0);
+  });
+});
+
+describe('記事 worked example: 一時金の税額（Q4 / lump-sum-vs-pension 記事の数値の裏取り）', () => {
+  // 退職金1,500万円・勤続25年・一般
+  it('課税175万・所得税89,337・住民税175,000・税合計264,337・手取り14,735,663', () => {
+    const r = calcAll({ retirementAmount: 15_000_000, yearsOfService: 25, isExecutive: false });
+    expect(r.taxableRetirementIncome).toBe(1_750_000);
+    expect(r.incomeTax).toBe(89_337);
+    expect(r.residentTax).toBe(175_000);
+    expect(r.totalTax).toBe(264_337);
+    expect(r.netAmount).toBe(14_735_663);
   });
 });

@@ -39,6 +39,9 @@ const RECONSTRUCTION_TAX_MULTIPLIER = 1.021;
 /** 住民税率（一律10%、政令市は内訳異なるが合計同じ） */
 const RESIDENT_TAX_RATE = 0.10;
 
+/** 「退職所得の受給に関する申告書」未提出時の源泉徴収率（20.42% = 所得税20% + 復興特別0.42%） */
+const WITHHOLDING_RATE_NO_DECLARATION = 0.2042;
+
 /** 役員等で勤続5年以下の特例 / 短期退職手当等の判定境界 */
 const SHORT_SERVICE_YEARS = 5;
 
@@ -276,6 +279,31 @@ export function calcResidentTax(taxableIncome: number): number {
   const raw = taxableIncome * RESIDENT_TAX_RATE;
   // 100円未満切り捨て
   return Math.floor(raw / 100) * 100;
+}
+
+
+// ============================================================
+// 申告書未提出時の源泉徴収（比較用）
+// ============================================================
+
+/**
+ * 「退職所得の受給に関する申告書」未提出時の源泉徴収税額
+ * 法的根拠: 所得税法第201条第3項
+ * 参照: 国税庁タックスアンサー No.2732（退職手当等に対する源泉徴収）
+ *
+ * 申告書を提出しない場合、退職所得控除・2分の1課税・累進税率が一切適用されず、
+ * 支払金額（退職金額）に一律 20.42%（所得税20% + 復興特別所得税0.42%）が課される。
+ * 端数: 1円未満切り捨て。
+ *
+ * これは calcAll（申告書提出＝正規の税額）との比較で「出し忘れの損」を示すための関数。
+ * 払いすぎた分は確定申告で精算できる。
+ *
+ * @param retirementAmount 退職金額（円）
+ * @returns 源泉徴収税額（円、1円未満切り捨て）
+ */
+export function calcWithholdingWithoutDeclaration(retirementAmount: number): number {
+  if (retirementAmount <= 0) return 0;
+  return Math.floor(retirementAmount * WITHHOLDING_RATE_NO_DECLARATION);
 }
 
 
