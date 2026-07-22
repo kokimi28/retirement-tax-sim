@@ -313,3 +313,29 @@ describe('記事 worked example: 短期退職手当等（short-term-retirement �
     expect(r.netAmount).toBe(8_459_178);
   });
 });
+
+
+describe('記事 worked example: iDeCo同年受取（idct-same-year 記事の退職金側の裏取り）', () => {
+  // 勤続20年・一般・退職金1,000万円（iDeCo同年受取記事の退職金ベースライン）
+  it('課税100万・税合計151,050・手取り9,848,950', () => {
+    const r = calcAll({ retirementAmount: 10_000_000, yearsOfService: 20, isExecutive: false });
+    expect(r.retirementDeduction).toBe(8_000_000);
+    expect(r.taxableRetirementIncome).toBe(1_000_000);
+    expect(r.totalTax).toBe(151_050);
+    expect(r.netAmount).toBe(9_848_950);
+  });
+});
+
+describe('記事 worked example: 自己都合vs会社都合（reason-and-tax 記事の裏取り）', () => {
+  // 退職理由は税額計算に影響しない（separationReason は UI 用）
+  const base = { retirementAmount: 5_000_000, yearsOfService: 10, isExecutive: false };
+  it('自己都合・会社都合で税額は同一（勤続10年・500万で税75,525・手取り4,924,475）', () => {
+    const voluntary = calcAll({ ...base, separationReason: 'voluntary' });
+    const involuntary = calcAll({ ...base, separationReason: 'involuntary' });
+    expect(voluntary.totalTax).toBe(75_525);
+    expect(voluntary.netAmount).toBe(4_924_475);
+    expect(involuntary.totalTax).toBe(voluntary.totalTax);
+    expect(involuntary.netAmount).toBe(voluntary.netAmount);
+    expect(involuntary.taxableRetirementIncome).toBe(voluntary.taxableRetirementIncome);
+  });
+});
