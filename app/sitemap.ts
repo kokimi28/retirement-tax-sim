@@ -9,9 +9,17 @@
 
 import type { MetadataRoute } from 'next';
 import { SITE_META } from '@/lib/site-meta';
+import { ARTICLES } from '@/lib/articles';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date(SITE_META.lastUpdated);
+
+  const articleEntries: MetadataRoute.Sitemap = ARTICLES.map((a) => ({
+    url: `${SITE_META.url}/articles/${a.slug}`,
+    lastModified: new Date(a.updated),
+    changeFrequency: 'yearly',
+    priority: 0.6,
+  }));
 
   return [
     {
@@ -20,6 +28,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 1.0,
     },
+    {
+      url: `${SITE_META.url}/articles`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    ...articleEntries,
     {
       url: `${SITE_META.url}/about`,
       lastModified,
