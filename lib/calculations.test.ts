@@ -290,3 +290,26 @@ describe('記事 worked example: 一時金の税額（Q4 / lump-sum-vs-pension �
     expect(r.netAmount).toBe(14_735_663);
   });
 });
+
+
+describe('記事 worked example: 役員退職金（executive-retirement 記事の数値の裏取り）', () => {
+  // 勤続5年・役員・退職金600万円 → 特定役員退職手当等（1/2なし）
+  it('役員: 課税400万・税合計780,322・手取り5,219,678', () => {
+    const r = calcAll({ retirementAmount: 6_000_000, yearsOfService: 5, isExecutive: true });
+    expect(r.taxableRetirementIncome).toBe(4_000_000);
+    expect(r.category).toBe('specificExecutive');
+    expect(r.totalTax).toBe(780_322);
+    expect(r.netAmount).toBe(5_219_678);
+  });
+});
+
+describe('記事 worked example: 短期退職手当等（short-term-retirement 記事の数値の裏取り）', () => {
+  // 勤続5年・一般・退職金1000万円 → 短期・控除後800万>300万 → 300万超に1/2効かず
+  it('短期300万超: 課税650万・税合計1,540,822・手取り8,459,178', () => {
+    const r = calcAll({ retirementAmount: 10_000_000, yearsOfService: 5, isExecutive: false });
+    expect(r.taxableRetirementIncome).toBe(6_500_000);
+    expect(r.category).toBe('shortTermOver300');
+    expect(r.totalTax).toBe(1_540_822);
+    expect(r.netAmount).toBe(8_459_178);
+  });
+});
