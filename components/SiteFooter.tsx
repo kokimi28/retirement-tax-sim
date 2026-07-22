@@ -26,6 +26,7 @@ export default function SiteFooter() {
         </p>
         <div className="pt-3 border-t border-gray-200 flex flex-wrap gap-4">
           <Link href="/" className="hover:text-gray-700">トップ</Link>
+          <Link href="/articles" className="hover:text-gray-700">解説記事</Link>
           <Link href="/about" className="hover:text-gray-700">サイトについて</Link>
           <Link href="/privacy" className="hover:text-gray-700">プライバシーポリシー</Link>
           <Link href="/disclosure" className="hover:text-gray-700">運営者情報</Link>
