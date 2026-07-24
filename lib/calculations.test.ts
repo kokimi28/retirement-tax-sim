@@ -111,6 +111,14 @@ describe('calcIncomeTax: 所得税額（復興特別所得税込み）', () => {
     // 期待: floor(372500 * 1.021) = floor(380322.5) = 380322
     expect(result).toBe(380_322);
   });
+  it('各税率区分の上限（10%〜45%・復興特別所得税込み）', () => {
+    // 速算表（課税×率 − 控除）＋ 復興特別所得税 2.1% を実出力で固定
+    expect(calcIncomeTax(3_300_000)).toBe(237_382); // 10%区分上限
+    expect(calcIncomeTax(9_000_000)).toBe(1_464_114); // 23%区分上限
+    expect(calcIncomeTax(18_000_000)).toBe(4_496_484); // 33%区分上限
+    expect(calcIncomeTax(40_000_000)).toBe(13_481_284); // 40%区分上限
+    expect(calcIncomeTax(50_000_000)).toBe(18_075_784); // 45%区分（Infinity）
+  });
 });
 
 describe('calcResidentTax: 住民税', () => {
