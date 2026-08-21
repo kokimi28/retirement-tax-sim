@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# claude — リモート UI 検証の一時出力（scripts/verify-ui-remote.mjs）
+.claude/tmp/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
